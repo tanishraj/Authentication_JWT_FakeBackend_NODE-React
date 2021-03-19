@@ -1,27 +1,38 @@
 const { sign } = require('jsonwebtoken');
 
+// Create tokens
+// ----------------------------------
 const createAccessToken = userId => {
-    return sign({ userId }, process.env.ACCESS_TOKEN_SECRET), { expiresIn: "15m" }
-}
+    return sign({ userId }, process.env.ACCESS_TOKEN_SECRET, {
+        expiresIn: '15m',
+    });
+};
 
 const createRefreshToken = userId => {
-    return sign({ userId }, process.env.REFRESH_TOKEN_SECRET), { expiresIn: "7d" }
-}
+    return sign({ userId }, process.env.REFRESH_TOKEN_SECRET, {
+        expiresIn: '7d',
+    });
+};
 
-const sendAccessToken = (res, req, accessToken) => {
+// Send tokens
+// ----------------------------------
+const sendAccessToken = (res, req, accesstoken) => {
     res.send({
-        accessToken: accessToken,
-        email: req.body.email
-    })
-}
+        accesstoken,
+        email: req.body.email,
+    });
+};
 
-const sendRefreshToken = (res, refreshToken) => {
-    res.cookie(
-        'refreshToken', refreshToken, {
+const sendRefreshToken = (res, token) => {
+    res.cookie('refreshtoken', token, {
         httpOnly: true,
-        path: '/refresh_token'
-    }
-    )
-}
+        path: '/refresh_token',
+    });
+};
 
-module.exports = { createAccessToken, createRefreshToken, sendAccessToken, sendRefreshToken }
+module.exports = {
+    createAccessToken,
+    createRefreshToken,
+    sendAccessToken,
+    sendRefreshToken
+};
